@@ -21,7 +21,7 @@ def main():
                     print(f"ChatGPT: {gpt_response}")
                     
                     # Use ElevenLabs TTS to speak out the response
-                    speak_text(gpt_response, pitch_factor=0.7)  # Adjust pitch as needed
+                    speak_text(gpt_response, pitch_factor=0.65)  # Adjust pitch as needed
 
             time.sleep(1)  # Optional delay for smoother loop pacing
 
