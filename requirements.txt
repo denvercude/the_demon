@@ -1,0 +1,7 @@
+speechrecognition
+openai==0.28
+python-dotenv
+pyaudio
+pygame
+pydub
+elevenlabs
