@@ -2,7 +2,6 @@ import openai
 import os
 from chat_history import ChatHistory
 from config import OPENAI_API_KEY, DEFAULT_MODEL
-from pdf_processing import extract_text_from_pdf
 
 # Load API KEY
 openai.api_key = OPENAI_API_KEY
@@ -64,7 +63,6 @@ with open(demon_memory_path, "r") as memory_file:
 
 # Combine demon memory with system instructions
 combined_instructions = SYSTEM_INSTRUCTIONS + "\n\n" + demon_memory
-print("Combined Instructions:\n", combined_instructions) 
 
 
 def chat_with_gpt(prompt, chat_history=None):
