@@ -10,10 +10,10 @@ except Exception as e:
 def capture_speech():
     with sr.Microphone() as source:
         print("Adjusting for ambient noise... Please wait.")
-        recognizer.adjust_for_ambient_noise(source, duration=2)
+        recognizer.adjust_for_ambient_noise(source, duration=1)
         print("Listening...")
         try:
-            audio = recognizer.listen(source, timeout=5)
+            audio = recognizer.listen(source, timeout=20)
             print("Recognizing speech...")
             text = recognizer.recognize_google(audio)
             return text
