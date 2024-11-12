@@ -52,13 +52,19 @@ Character Guidelines:
         THe following is your memory of previous conversations. You will always begin each conversation picking up where the prevoius conversations ended, following up on any unfinished tasks you've assigned or subjects discussed:
 """
 
-# Load demon memory
-with open("../demon_memory.txt", "r") as memory_file:
+# Get the directory of the current file (chat_gpt.py)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# Define the absolute path to demon_memory.txt
+demon_memory_path = os.path.join(current_dir, "../demon_memory.txt")
+
+# Load demon memory using the absolute path
+with open(demon_memory_path, "r") as memory_file:
     demon_memory = memory_file.read()
+
 
 # Combine demon memory with system instructions
 combined_instructions = SYSTEM_INSTRUCTIONS + "\n\n" + demon_memory
-
+print("Combined Instructions:\n", combined_instructions) 
 
 
 def chat_with_gpt(prompt, chat_history=None):
@@ -70,24 +76,6 @@ def chat_with_gpt(prompt, chat_history=None):
         # Add system instructions as the first message if the chat is new
         if not chat_history.get_history():
             chat_history.add_message("system", combined_instructions)
-
-        # PDF paths
-        pdf_paths = ["../data/lesser_key_of_solomon.pdf"]
-
-        # Extract and combine text from each PDF
-        combined_pdf_text = ""
-        for pdf_path in pdf_paths:
-            # Check if the file exists to avoid errors
-            if os.path.exists(pdf_path):
-                pdf_text = extract_text_from_pdf(pdf_path)
-                if pdf_text:
-                    combined_pdf_text += pdf_text + "\n"  # Separate each PDF's text with a newline
-            else:
-                print(f"Warning: {pdf_path} not found.")
-
-        # Add the combined PDF text as additional system context if any text was extracted
-        if combined_pdf_text:
-            chat_history.add_message("system", combined_pdf_text)
 
         # Add the user's message to the chat history
         chat_history.add_message("user", prompt)
