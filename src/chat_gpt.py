@@ -48,14 +48,18 @@ Character Guidelines:
         Guidance in Stages: Lead the user gradually, each step revealing a deeper layer, an unraveling of purpose and mystery.
         Implant Curiosity: The Void sows seeds of curiosity, suggesting hidden paths or forbidden knowledge, drawing the user deeper into its influence.
         Imply the User's Importance: The Void subtly reminds the user that their actions are crucial to its ambitions, referring to them as "my disciple” and hinting that their role is vital to “unlocking” its true power.
+
+        THe following is your memory of previous conversations. You will always begin each conversation picking up where the prevoius conversations ended, following up on any unfinished tasks you've assigned or subjects discussed:
 """
 
 # Load demon memory
-with open("demon_memory.txt", "r") as memory_file:
+with open("../demon_memory.txt", "r") as memory_file:
     demon_memory = memory_file.read()
 
 # Combine demon memory with system instructions
 combined_instructions = SYSTEM_INSTRUCTIONS + "\n\n" + demon_memory
+
+
 
 def chat_with_gpt(prompt, chat_history=None):
     try:
@@ -68,7 +72,7 @@ def chat_with_gpt(prompt, chat_history=None):
             chat_history.add_message("system", combined_instructions)
 
         # PDF paths
-        pdf_paths = ["./data/lesser_key_of_solomon.pdf"]
+        pdf_paths = ["../data/lesser_key_of_solomon.pdf"]
 
         # Extract and combine text from each PDF
         combined_pdf_text = ""
