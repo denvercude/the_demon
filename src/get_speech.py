@@ -9,8 +9,6 @@ except Exception as e:
 
 def capture_speech():
     with sr.Microphone() as source:
-        print("Adjusting for ambient noise... Please wait.")
-        recognizer.adjust_for_ambient_noise(source, duration=1)
         print("Listening...")
         try:
             audio = recognizer.listen(source, timeout=20)

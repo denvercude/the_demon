@@ -6,3 +6,4 @@ pygame
 pydub
 elevenlabs
 pymupdf
+gtts

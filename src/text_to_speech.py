@@ -22,6 +22,7 @@ def speak_text(text, pitch_factor):
         # Load the audio with pydub
         audio = AudioSegment.from_file("response.mp3")
 
+        
         # Lower the pitch by changing the playback speed
         lowered_pitch_audio = audio._spawn(audio.raw_data, overrides={
             "frame_rate": int(audio.frame_rate * pitch_factor)

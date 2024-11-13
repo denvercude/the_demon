@@ -3,7 +3,6 @@ from text_to_speech import speak_text
 from get_speech import capture_speech
 from chat_history import ChatHistory
 from create_memory import generate_and_save_summary
-import time
  
 def main():
     print("Starting the voice-based ChatGPT conversation. Press Ctrl+C to exit.")
@@ -31,8 +30,6 @@ def main():
                     
                     # Use ElevenLabs TTS to speak out the response
                     speak_text(gpt_response, pitch_factor=0.77)  # Adjust pitch as needed
-
-            time.sleep(1)  # Optional delay for smoother loop pacing
 
         except KeyboardInterrupt:
             print("\nConversation ended by user.")
