@@ -12,7 +12,6 @@ except Exception as e:
 
 def capture_speech():
     with sr.Microphone() as source:
-        # Adjust for ambient noise before starting
         recognizer.adjust_for_ambient_noise(source, duration=1)
         
         print("Listening...")
