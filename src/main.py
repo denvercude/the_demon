@@ -77,7 +77,7 @@ while running:
         response, chat_history = chat_with_gpt(user_input, chat_history)
 
         # Generate the audio and save it to the file
-        audio_file = speak_text(response, pitch_factor=1.0)
+        audio_file = speak_text(response, pitch_factor=0.77)
 
         threading.Thread(target=play_audio_with_visual, args=(audio_file, screen, line_y, line_color), daemon=True).start()
 
