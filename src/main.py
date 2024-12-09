@@ -42,15 +42,22 @@ def play_audio_with_visual(audio_file, screen, line_y, line_color):
     for i, chunk in enumerate(chunks):
         amplitude = np.abs(chunk).mean()
         amplitude_normalized = amplitude / (2 ** 15)
-        bar_height = int(amplitude_normalized * (screen.get_height() // 2))  # Scale bar height
+        bar_height = int(amplitude_normalized * (screen.get_height() // 2))  # Scale bar height based on amplitude
         
         screen.fill((0, 0, 0))  # Clear the screen
         for x in range(0, screen.get_width(), 10):  # Draw bars with spacing
-            bar_y_top = line_y - bar_height // 2
-            bar_y_bottom = line_y + bar_height // 2
+            # Calculate a scaling factor based on the distance from the center
+            distance_from_center = abs(x - screen.get_width() // 2)
+            scale_factor = 1 - (distance_from_center / (screen.get_width() // 2))  # Scale from 1 at center to 0 at edges
+            scaled_bar_height = int(bar_height * scale_factor)  # Adjust bar height using the scale factor
+            
+            bar_y_top = line_y - scaled_bar_height // 2
+            bar_y_bottom = line_y + scaled_bar_height // 2
             pygame.draw.line(screen, line_color, (x, bar_y_top), (x, bar_y_bottom), 5)  # Draw vertical bars
         pygame.display.flip()
         time.sleep(1 / 30)
+
+
 
     is_playing_audio = False
     
