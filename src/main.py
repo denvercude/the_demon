@@ -6,15 +6,18 @@ from visualizer import play_and_display
 import pygame
 
 # Initialize screen dimensions and colors
-screen_width = 500
-screen_height = 500
 BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 
 # Initialize Pygame
 pygame.init()
 pygame.display.set_caption("Demon Visualizer")
-screen = pygame.display.set_mode((screen_width, screen_height))
+
+# Set screen to fullscreen
+display_info = pygame.display.Info()
+screen_width = display_info.current_w
+screen_height = display_info.current_h
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 
 # Function to draw the initial green line
@@ -35,6 +38,8 @@ def main():
         # Handle quit event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:  # Allow ESC to exit fullscreen
                 running = False
 
         # Capture user input
