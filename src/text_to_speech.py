@@ -32,10 +32,10 @@ def speak_text(text, pitch_factor):
         # Combine the main voice, whisper, and reverb layers
         demonic_voice = lowered_pitch_audio.overlay(whisper_layer)
 
-        # Export the modified audio to response.mp3
-        demonic_voice.export("response.mp3", format="mp3")
+        # Export the modified audio to response.wav
+        demonic_voice.export("response.wav", format="wav")
 
-        return "response.mp3"
+        return "response.wav"
     except Exception as e:
         print(f"Error with TTS engine or audio processing: {e}")
         return None

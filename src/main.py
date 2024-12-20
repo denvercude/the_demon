@@ -1,94 +1,69 @@
-import pygame
-import numpy as np 
-import time
-from get_speech import capture_speech
 from chat_gpt import chat_with_gpt
-from text_to_speech import speak_text
 from chat_history import ChatHistory
-from pydub.utils import make_chunks
-from pydub import AudioSegment
-from pydub.playback import play
-import threading
+from get_speech import capture_speech
+from text_to_speech import speak_text
+from visualizer import play_and_display
+import pygame
 
-# Initial display of the waveform line on a black background.
+# Initialize screen dimensions and colors
+screen_width = 500
+screen_height = 500
+BLACK = (0, 0, 0)
+GREEN = (0, 255, 0)
+
+# Initialize Pygame
 pygame.init()
-screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
-pygame.display.set_caption("ChatGPT Visualizer")
-screen.fill((0, 0, 0))
-pygame.display.flip()
+pygame.display.set_caption("Demon Visualizer")
+screen = pygame.display.set_mode((screen_width, screen_height))
+clock = pygame.time.Clock()
 
-line_y = screen.get_height() // 2
-line_color = (0, 255, 0)
-
-pygame.draw.line(screen, line_color, (0, line_y), (screen.get_width(), line_y), 2)
-pygame.display.flip()
-
-pygame.mixer.init(frequency=44100, size=-16, channels=1)
-
-running = True
-chat_history = ChatHistory()
-is_playing_audio = False
-
-def play_audio_with_visual(audio_file, screen, line_y, line_color):
-    global is_playing_audio
-    is_playing_audio = True
-    audio = AudioSegment.from_file(audio_file)
-    pygame.mixer.Sound(audio_file).play()
-    samples = np.array(audio.get_array_of_samples())
-    sample_rate = audio.frame_rate
-    chunk_size = sample_rate // 30  # Approximate 30 FPS visualization
-    chunks = [samples[i:i + chunk_size] for i in range(0, len(samples), chunk_size)]
-
-    for i, chunk in enumerate(chunks):
-        amplitude = np.abs(chunk).mean()
-        amplitude_normalized = amplitude / (2 ** 15)
-        bar_height = int(amplitude_normalized * (screen.get_height() // 2))  # Scale bar height based on amplitude
-        
-        screen.fill((0, 0, 0))  # Clear the screen
-        for x in range(0, screen.get_width(), 10):  # Draw bars with spacing
-            # Calculate a scaling factor based on the distance from the center
-            distance_from_center = abs(x - screen.get_width() // 2)
-            scale_factor = 1 - (distance_from_center / (screen.get_width() // 2))  # Scale from 1 at center to 0 at edges
-            scaled_bar_height = int(bar_height * scale_factor)  # Adjust bar height using the scale factor
-            
-            bar_y_top = line_y - scaled_bar_height // 2
-            bar_y_bottom = line_y + scaled_bar_height // 2
-            pygame.draw.line(screen, line_color, (x, bar_y_top), (x, bar_y_bottom), 5)  # Draw vertical bars
-        pygame.display.flip()
-        time.sleep(1 / 30)
-
-
-
-    is_playing_audio = False
-    
-    screen.fill((0, 0, 0))
-    pygame.draw.line(screen, line_color, (0, line_y), (screen.get_width(), line_y), 2)
+# Function to draw the initial green line
+def draw_initial_line():
+    screen.fill(BLACK)
+    line_y = screen_height // 2
+    pygame.draw.line(screen, GREEN, (0, line_y), (screen_width, line_y), 2)
     pygame.display.flip()
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            running = False
-    
-    user_input = capture_speech()
+def main():
+    running = True
+    chat_history = ChatHistory()
 
-    if user_input and user_input.strip().lower() == "goodbye demon":
-        running = False
-    
-    if user_input:
-        print(f"You: {user_input}")
+    # Draw the initial line
+    draw_initial_line()
 
-        response, chat_history = chat_with_gpt(user_input, chat_history)
+    while running:
+        # Handle quit event
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-        # Generate the audio and save it to the file
-        audio_file = speak_text(response, pitch_factor=0.77)
+        # Capture user input
+        user_input = capture_speech()
 
-        threading.Thread(target=play_audio_with_visual, args=(audio_file, screen, line_y, line_color), daemon=True).start()
+        if user_input:
+            # Check for termination phrase
+            if user_input.strip().lower() == 'goodbye demon':
+                running = False
+                continue
 
-        if not is_playing_audio:
-            screen.fill((0, 0, 0))
-            pygame.draw.line(screen, line_color, (0, line_y), (screen.get_width(), line_y), 2)
-            pygame.display.flip()
+            print(f"You: {user_input}")
+
+            # Get response from GPT
+            response, chat_history = chat_with_gpt(user_input, chat_history)
+
+            if response:
+                print(f"Demon: {response}")
+
+                # Generate and play response audio
+                audio_file = speak_text(response, pitch_factor=0.77)
+                play_and_display(audio_file, screen, screen_height, screen_width)
+
+        # Ensure the screen updates continue
+        pygame.display.flip()
+        clock.tick(30)  # Limit to 30 FPS
+
+    # Quit Pygame when done
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
