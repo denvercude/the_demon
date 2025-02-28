@@ -26,7 +26,7 @@ Tech
 Demo
 ----
 
-[![Watch the video](https://img.youtube.com/vi/wF3bQWRroZg/0.jpg)](https://www.youtube.com/watch?v=wF3bQWRroZg)
+[![Demon Demo](https://img.youtube.com/vi/wF3bQWRroZg/0.jpg)](https://www.youtube.com/watch?v=wF3bQWRroZg)
 
 Installation and Setup
 ----------------------
