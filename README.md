@@ -2,7 +2,7 @@ Overview
 --------
 the_demon is a Python-based voice interaction system that establishes a real-time conversation with ChatGPT, prompting it to roleplay as a funny, sarcastic demon. 
 The system converts text responses into speech and dynamically visualizes the audio output using a bar graph that simulates a computer's mouth.
-I made this after watching the movie Late Night with the Devil and is just a fun exploration of ChatGPT's API and figuring out audio visualization techniques.
+I decided to make this after watching the movie Late Night with the Devil. It's just a fun exploration of ChatGPT's API and figuring out audio visualization techniques.
 
 Features
 --------
